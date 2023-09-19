@@ -124,7 +124,7 @@ public class CustomerService {
 
         if (customerOptional.isPresent()) {
             String idCustomer = customerOptional.get().getIdCustomer();
-            count = Integer.parseInt(idCustomer.substring(8, idCustomer.length() - 1)) + 1;
+            count = Integer.parseInt(idCustomer.substring(8)) + 1;
         }
 
         return String.format("%s%04d", date, count);
