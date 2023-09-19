@@ -31,7 +31,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "id_customer", referencedColumnName = "id")
     private Customer customer;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.PERSIST)
     private List<TransactionDetail> transactionDetailList;
     private Integer totalPayment;
     private Integer totalPaid;

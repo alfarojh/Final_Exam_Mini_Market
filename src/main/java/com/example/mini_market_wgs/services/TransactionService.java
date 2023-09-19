@@ -61,6 +61,7 @@ public class TransactionService {
             return new ApiResponse(Utility.message("payment_invalid"));
         }
         List<TransactionDetail> transactionDetailList = new ArrayList<>();
+        Transaction transaction = new Transaction();
         int totalPaid = 0;
 
         for (DtoTransactionDetailRequest transactionDetailRequest : transactionRequest.getTransactionDetailRequests()) {
@@ -79,6 +80,7 @@ public class TransactionService {
                 int price = itemOptional.get().getPrice();
                 int quantity = transactionDetailRequest.getQuantity();
 
+                transactionDetail.setTransactionCore(transaction);
                 transactionDetail.setItem(itemOptional.get());
                 transactionDetail.setPrice(price);
                 transactionDetail.setQuantity(quantity);
@@ -92,7 +94,6 @@ public class TransactionService {
             return new ApiResponse(Utility.message("insufficient_money"));
         }
 
-        Transaction transaction = new Transaction();
         transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier()));
         transaction.setCashier(cashierOptional.get());
         transaction.setCustomer(customerOptional.get());

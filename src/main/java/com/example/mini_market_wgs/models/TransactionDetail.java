@@ -13,7 +13,6 @@ public class TransactionDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_transaction", referencedColumnName = "id")
     private Transaction transaction;
     @ManyToOne
     @JoinColumn(name = "id_item", referencedColumnName = "id")
