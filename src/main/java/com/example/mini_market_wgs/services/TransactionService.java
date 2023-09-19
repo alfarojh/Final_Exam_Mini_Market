@@ -8,10 +8,12 @@ import com.example.mini_market_wgs.models.ApiResponse;
 import com.example.mini_market_wgs.models.Cashier;
 import com.example.mini_market_wgs.models.Customer;
 import com.example.mini_market_wgs.models.Item;
+import com.example.mini_market_wgs.models.ItemRelational;
 import com.example.mini_market_wgs.models.Transaction;
 import com.example.mini_market_wgs.models.TransactionDetail;
 import com.example.mini_market_wgs.repositories.CashierRepository;
 import com.example.mini_market_wgs.repositories.CustomerRepository;
+import com.example.mini_market_wgs.repositories.ItemRelationRepository;
 import com.example.mini_market_wgs.repositories.ItemRepository;
 import com.example.mini_market_wgs.repositories.TransactionRepository;
 import com.example.mini_market_wgs.utilities.Utility;
@@ -36,6 +38,8 @@ public class TransactionService {
     private CustomerRepository customerRepository;
     @Autowired
     private CashierRepository cashierRepository;
+    @Autowired
+    private ItemRelationRepository itemRelationRepository;
     @Autowired
     private ItemRepository itemRepository;
 
@@ -87,6 +91,7 @@ public class TransactionService {
                 transactionDetail.setTotalPrice(price * quantity);
                 totalPaid += price * quantity;
                 transactionDetailList.add(transactionDetail);
+                addRelational(transactionDetailList);
             }
         }
 
@@ -135,6 +140,43 @@ public class TransactionService {
             return new ApiResponse(
                     Utility.message("success"),
                     new DtoTransactionResponse(transactionOptional.get()));
+        }
+    }
+
+    private void addRelational(List<TransactionDetail> transactionDetailList) {
+        for (int indexTransactionFirst = 0; indexTransactionFirst < transactionDetailList.size() - 1; indexTransactionFirst++) {
+            for (int indexTransactionSecond = indexTransactionFirst + 1; indexTransactionSecond < transactionDetailList.size(); indexTransactionSecond++) {
+                Item item1 = transactionDetailList.get(indexTransactionFirst).getItem();
+                Item item2 = transactionDetailList.get(indexTransactionSecond).getItem();
+
+                if (item1.getIdItem().compareTo(item2.getIdItem()) < 0) {
+                    Optional<ItemRelational> itemRelationalOptional = itemRelationRepository.findFirstByItem1AndItem2(item1, item2);
+
+                    if (itemRelationalOptional.isPresent()) {
+                        itemRelationalOptional.get().addCount();
+                        itemRelationRepository.save(itemRelationalOptional.get());
+                    } else {
+                        ItemRelational itemRelational = new ItemRelational();
+                        itemRelational.setItem1(item1);
+                        itemRelational.setItem2(item2);
+                        itemRelational.setCount(1);
+                        itemRelationRepository.save(itemRelational);
+                    }
+                } else if (item1.getIdItem().compareTo(item2.getIdItem()) > 0) {
+                    Optional<ItemRelational> itemRelationalOptional = itemRelationRepository.findFirstByItem1AndItem2(item2, item1);
+
+                    if (itemRelationalOptional.isPresent()) {
+                        itemRelationalOptional.get().addCount();
+                        itemRelationRepository.save(itemRelationalOptional.get());
+                    } else {
+                        ItemRelational itemRelational = new ItemRelational();
+                        itemRelational.setItem1(item2);
+                        itemRelational.setItem2(item1);
+                        itemRelational.setCount(0);
+                        itemRelationRepository.save(itemRelational);
+                    }
+                }
+            }
         }
     }
 
