@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Optional<Transaction> findFirstByIdTransactionContainingOrderByIdTransactionDesc(String idTransaction);
     Optional<Transaction> findFirstByIdTransaction(String idTransaction);
-    Page<Transaction> findAllByOrderByCreatedAt(Pageable pageable);
+    Page<Transaction> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

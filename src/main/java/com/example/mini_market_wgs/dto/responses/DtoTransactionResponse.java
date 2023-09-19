@@ -38,6 +38,7 @@ public class DtoTransactionResponse {
         this.totalPaid = transaction.getTotalPaid();
         this.totalReturned = transaction.getTotalReturned();
         this.transactionDetailResponses = new ArrayList<>();
+        this.createdAt = transaction.getCreatedAt();
         for (TransactionDetail transactionDetail : transaction.getTransactionDetailList()) {
             transactionDetailResponses.add(new DtoTransactionDetailResponse(transactionDetail));
         }

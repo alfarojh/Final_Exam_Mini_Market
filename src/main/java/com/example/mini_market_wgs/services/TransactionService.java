@@ -2,7 +2,6 @@ package com.example.mini_market_wgs.services;
 
 import com.example.mini_market_wgs.dto.requests.DtoTransactionDetailRequest;
 import com.example.mini_market_wgs.dto.requests.DtoTransactionRequest;
-import com.example.mini_market_wgs.dto.responses.DtoItemResponse;
 import com.example.mini_market_wgs.dto.responses.DtoTransactionResponse;
 import com.example.mini_market_wgs.models.ApiResponse;
 import com.example.mini_market_wgs.models.Cashier;
@@ -117,7 +116,7 @@ public class TransactionService {
 
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Transaction> result = transactionRepository.findAllByOrderByCreatedAt(pageable);
+        Page<Transaction> result = transactionRepository.findAllByOrderByCreatedAtDesc(pageable);
         List<DtoTransactionResponse> resultDto = new ArrayList<>();
 
         for (Transaction transaction: result.getContent()) {
