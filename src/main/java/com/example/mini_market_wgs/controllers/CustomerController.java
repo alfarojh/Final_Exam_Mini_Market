@@ -1,14 +1,14 @@
 package com.example.mini_market_wgs.controllers;
 
 import com.example.mini_market_wgs.dto.requests.DtoCashierRequest;
+import com.example.mini_market_wgs.dto.requests.DtoCustomerRequest;
 import com.example.mini_market_wgs.models.ApiResponse;
-import com.example.mini_market_wgs.services.CashierService;
+import com.example.mini_market_wgs.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,24 +18,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cashiers")
-public class CashierController {
+@RequestMapping("/customers")
+public class CustomerController {
     @Autowired
-    private CashierService cashierService;
+    private CustomerService customerService;
 
     @GetMapping("")
-    public ResponseEntity getCashiers(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(cashierService.getAll(page, limit));
+    public ResponseEntity getCustomers(@RequestParam int page, @RequestParam int limit) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.getAll(page, limit));
     }
 
-    @GetMapping("/{idCashier}")
-    public ResponseEntity getCashiersByIdCashier(@PathVariable String idCashier) {
-        return ResponseEntity.status(HttpStatus.OK).body(cashierService.getByIdCashier(idCashier));
+    @GetMapping("/{idCustomer}")
+    public ResponseEntity getCustomerByIdCustomer(@PathVariable String idCustomer) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.getByIdCustomer(idCustomer));
     }
 
     @PostMapping("")
-    public ResponseEntity addCashier(@RequestBody DtoCashierRequest cashierRequest) {
-        ApiResponse apiResponse = cashierService.add(cashierRequest);
+    public ResponseEntity addCustomer(@RequestBody DtoCustomerRequest customerRequest) {
+        ApiResponse apiResponse = customerService.add(customerRequest);
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
@@ -45,19 +45,8 @@ public class CashierController {
     }
 
     @PutMapping("")
-    public ResponseEntity updateDataCashier(@RequestBody DtoCashierRequest cashierRequest) {
-        ApiResponse apiResponse = cashierService.updateDate(cashierRequest);
-
-        if (apiResponse.getData() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-        }
-    }
-
-    @PatchMapping("")
-    public ResponseEntity updateStatusCashier(@RequestBody DtoCashierRequest cashierRequest) {
-        ApiResponse apiResponse = cashierService.updateStatusResign(cashierRequest.getIdCashier());
+    public ResponseEntity updateDataCustomer(@RequestBody DtoCustomerRequest customerRequest) {
+        ApiResponse apiResponse = customerService.updateData(customerRequest);
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
@@ -67,8 +56,8 @@ public class CashierController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity delete(@RequestBody DtoCashierRequest cashierRequest) {
-        ApiResponse apiResponse = cashierService.delete(cashierRequest.getIdCashier());
+    public ResponseEntity delete(@RequestBody DtoCustomerRequest customerRequest) {
+        ApiResponse apiResponse = customerService.delete(customerRequest.getIdCustomer());
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
