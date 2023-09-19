@@ -99,6 +99,18 @@ public class ItemService {
                 new PageImpl<>(resultDto, pageable, result.getTotalElements()));
     }
 
+    public ApiResponse getTop3() {
+        List<Item> itemList = itemRepository.findTop3ByOrderByQuantityPurchasedDesc();
+        List<DtoItemResponse> resultDto = new ArrayList<>();
+
+        for (Item item: itemList) {
+            resultDto.add(new DtoItemResponse(item));
+        }
+        return new ApiResponse(
+                Utility.message("success"),
+                resultDto);
+
+    }
     public ApiResponse getByIdItem(String idItem) {
         if (idItem == null) {
             return new ApiResponse(Utility.message("item_not_insert"));

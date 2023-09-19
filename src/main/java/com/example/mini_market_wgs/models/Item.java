@@ -54,6 +54,9 @@ public class Item extends BaseModel{
         this.quantityPurchased = quantityPurchased;
     }
 
+    public void addQuantityPurchased(int quantityPurchased) {
+        this.quantityPurchased += quantityPurchased;
+    }
     public Integer getQuantityReturned() {
         return quantityReturned;
     }

@@ -84,6 +84,7 @@ public class TransactionService {
                 int price = itemOptional.get().getPrice();
                 int quantity = transactionDetailRequest.getQuantity();
 
+                itemOptional.get().addQuantityPurchased(quantity);
                 transactionDetail.setTransactionCore(transaction);
                 transactionDetail.setItem(itemOptional.get());
                 transactionDetail.setPrice(price);

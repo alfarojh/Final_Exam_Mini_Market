@@ -2,14 +2,19 @@ package com.example.mini_market_wgs.dto.responses;
 
 import com.example.mini_market_wgs.models.Transaction;
 import com.example.mini_market_wgs.models.TransactionDetail;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DtoTransactionResponse {
+    @JsonProperty("created_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date createdAt;
     @JsonProperty("id_transaction")
     private String idTransaction;
     @JsonProperty("name_customer")
@@ -24,6 +29,7 @@ public class DtoTransactionResponse {
     private Integer totalPaid;
     @JsonProperty("total_returned")
     private Integer totalReturned;
+
     public DtoTransactionResponse(Transaction transaction) {
         this.idTransaction = transaction.getIdTransaction();
         this.nameCustomer = transaction.getCustomer().getName();
@@ -35,6 +41,14 @@ public class DtoTransactionResponse {
         for (TransactionDetail transactionDetail : transaction.getTransactionDetailList()) {
             transactionDetailResponses.add(new DtoTransactionDetailResponse(transactionDetail));
         }
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getIdTransaction() {

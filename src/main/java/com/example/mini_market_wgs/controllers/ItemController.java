@@ -28,6 +28,11 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(itemService.getAll(page, limit));
     }
 
+    @GetMapping("/top-3")
+    public ResponseEntity getItemsTop3() {
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.getTop3());
+    }
+
     @GetMapping("/{idItem}")
     public ResponseEntity getItemByIdItem(@PathVariable String idItem) {
         return ResponseEntity.status(HttpStatus.OK).body(itemService.getByIdItem(idItem));
