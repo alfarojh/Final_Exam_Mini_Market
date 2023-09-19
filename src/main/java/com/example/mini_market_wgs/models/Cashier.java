@@ -18,6 +18,13 @@ public class Cashier extends BaseModel{
         // Do Nothing
     }
 
+    public Cashier(String idCashier, String name, String phoneNumber, String address) {
+        this.idCashier = idCashier;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
     public String getIdCashier() {
         return idCashier;
     }

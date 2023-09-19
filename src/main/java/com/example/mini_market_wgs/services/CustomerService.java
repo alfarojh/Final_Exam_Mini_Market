@@ -33,9 +33,12 @@ public class CustomerService {
         } else if (Utility.isPhoneNumberNotValid(customerRequest.getPhoneNumber())) {
             return new ApiResponse(Utility.message("phone_invalid"));
         } else {
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            int year = Integer.parseInt(format.format(new Timestamp(System.currentTimeMillis())));
             Customer customer = new Customer();
 
             customer.setIdCustomer(getNewId());
+            customer.setYear(year);
             customer.setName(customerRequest.getName());
             customer.setPhoneNumber(customerRequest.getPhoneNumber());
             customerRepository.save(customer);

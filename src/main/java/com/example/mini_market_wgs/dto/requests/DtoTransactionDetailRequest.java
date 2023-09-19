@@ -8,6 +8,15 @@ public class DtoTransactionDetailRequest {
     @JsonProperty("quantity")
     private Integer quantity;
 
+    public DtoTransactionDetailRequest() {
+        // Do Nothing
+    }
+
+    public DtoTransactionDetailRequest(String idItem, Integer quantity) {
+        this.idItem = idItem;
+        this.quantity = quantity;
+    }
+
     public String getIdItem() {
         return idItem;
     }

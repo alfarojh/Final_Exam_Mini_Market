@@ -172,7 +172,7 @@ public class TransactionService {
                         ItemRelational itemRelational = new ItemRelational();
                         itemRelational.setItem1(item2);
                         itemRelational.setItem2(item1);
-                        itemRelational.setCount(0);
+                        itemRelational.setCount(1);
                         itemRelationRepository.save(itemRelational);
                     }
                 }

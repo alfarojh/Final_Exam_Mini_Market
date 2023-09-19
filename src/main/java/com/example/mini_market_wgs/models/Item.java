@@ -16,6 +16,12 @@ public class Item extends BaseModel{
         // Do Nothing
     }
 
+    public Item(String idItem, String name, Integer price) {
+        this.idItem = idItem;
+        this.name = name;
+        this.price = price;
+    }
+
     public String getIdItem() {
         return idItem;
     }
