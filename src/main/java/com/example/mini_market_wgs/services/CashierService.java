@@ -33,8 +33,8 @@ public class CashierService {
         } else {
             Cashier cashier = new Cashier();
 
-            cashier.setIdCashier(String.format("%03d", cashierRepository.count() + 1));
             cashier.setName(cashierRequest.getName());
+            cashier.setIdCashier(String.format("%03d", cashierRepository.count() + 1));
             cashier.setAddress(cashierRequest.getAddress());
             cashier.setPhoneNumber(cashierRequest.getPhoneNumber());
             cashierRepository.save(cashier);
@@ -60,7 +60,7 @@ public class CashierService {
         } else if (Utility.isNotAlphanumeric(cashierRequest.getAddress())) {
             return new ApiResponse(Utility.message("address_invalid"));
         } else {
-            cashierOptional.get().setIdCashier(String.format("%03d", cashierRepository.count() + 1));
+            cashierOptional.get().setIdCashier(cashierRequest.getIdCashier());
             cashierOptional.get().setName(cashierRequest.getName());
             cashierOptional.get().setAddress(cashierRequest.getAddress());
             cashierOptional.get().setPhoneNumber(cashierRequest.getPhoneNumber());
@@ -83,6 +83,25 @@ public class CashierService {
         } else {
             cashierOptional.get().setResign(true);
             cashierOptional.get().setResignedAt(new Date());
+            cashierRepository.save(cashierOptional.get());
+
+            return new ApiResponse(
+                    Utility.message("success"),
+                    new DtoCashierResponse(cashierOptional.get()));
+        }
+    }
+
+    public ApiResponse delete(String idCashier) {
+        if (idCashier == null) {
+            return new ApiResponse(Utility.message("cashier_not_insert"));
+        }
+        Optional<Cashier> cashierOptional = cashierRepository.findFirstByIsDeletedIsFalseAndIdCashier(idCashier);
+
+        if (!cashierOptional.isPresent()) {
+            return new ApiResponse(Utility.message("cashier_invalid"));
+        } else {
+            cashierOptional.get().setDeleted(true);
+            cashierOptional.get().setDeletedAt(new Date());
             cashierRepository.save(cashierOptional.get());
 
             return new ApiResponse(
