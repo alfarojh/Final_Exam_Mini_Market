@@ -172,7 +172,7 @@ public class TransactionService {
 
     public ApiResponse getAllByDate(int page, int limit, String startDate, String endDate, String idCustomer) {
         Date formatStartDate = Date.from(Instant.parse(startDate + "T00:00:00Z"));
-        Date formatEndDate = Date.from(Instant.parse(startDate + "T00:00:00Z"));
+        Date formatEndDate = Date.from(Instant.parse(endDate + "T00:00:00Z"));
 
         Pageable pageable = PageRequest.of(page, limit);
         Page<Transaction> result = idCustomer != null ?
