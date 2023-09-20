@@ -26,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +44,7 @@ public class TransactionService {
     @Autowired
     private ItemRepository itemRepository;
 
+    // Fungsi untuk menambahkan transaksi baru.
     @Transactional
     public ApiResponse add(DtoTransactionRequest transactionRequest) {
         if (transactionRequest.getIdCustomer() == null) {
@@ -72,6 +71,7 @@ public class TransactionService {
         Transaction transaction = new Transaction();
         int totalPaid = 0;
 
+        // Validasi item transaksi.
         for (DtoTransactionDetailRequest transactionDetailRequest : transactionRequest.getTransactionDetailRequests()) {
             if (transactionDetailRequest.getIdItem() == null) {
                 return new ApiResponse(Utility.message("item_not_insert"));
@@ -80,8 +80,7 @@ public class TransactionService {
 
             if (!itemOptional.isPresent()) {
                 return new ApiResponse(Utility.message("item_invalid"));
-            } else if (transactionDetailRequest.getQuantity() == null ||
-                    transactionDetailRequest.getQuantity() <= 0) {
+            } else if (transactionDetailRequest.getQuantity() == null || transactionDetailRequest.getQuantity() <= 0) {
                 return new ApiResponse(Utility.message("quantity_invalid"));
             } else {
                 TransactionDetail transactionDetail = new TransactionDetail();
@@ -99,6 +98,7 @@ public class TransactionService {
             }
         }
 
+        // Validasi pembayaran dan tanggal.
         Date date;
         if (totalPaid > transactionRequest.getTotalPayment()) {
             return new ApiResponse(Utility.message("insufficient_money", String.valueOf(totalPaid)));
@@ -125,6 +125,7 @@ public class TransactionService {
         );
     }
 
+    // Fungsi untuk mencatat barang yang sering dibeli bersamaan.
     private void addRelational(List<TransactionDetail> transactionDetailList) {
         List<Item> distinctItemList = distinctListTransactionalDetail(transactionDetailList);
 
@@ -165,11 +166,13 @@ public class TransactionService {
         }
     }
 
+    // Fungsi untuk menampilkan daftar transaksi.
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        return convertDto(transactionRepository.findAllByOrderByTransactionDateDesc(pageable), pageable);
+        return convertToDto(transactionRepository.findAllByOrderByTransactionDateDesc(pageable), pageable);
     }
 
+    // Fungsi untuk menampilkan daftar transaksi berdasarkan tanggal dan customer.
     public ApiResponse getAllByDate(int page, int limit, String startDate, String endDate, String idCustomer) {
         Date formatStartDate = Date.from(Instant.parse(startDate + "T00:00:00Z"));
         Date formatEndDate = Date.from(Instant.parse(endDate + "T00:00:00Z"));
@@ -179,14 +182,13 @@ public class TransactionService {
                 transactionRepository.findAllByTransactionDateBetweenAndCustomer_IdCustomerOrderByTransactionDateDesc(formatStartDate, formatEndDate, idCustomer, pageable) :
                 transactionRepository.findAllByTransactionDateBetweenOrderByTransactionDateDesc(formatStartDate, formatEndDate, pageable);
 
-        return convertDto(result, pageable);
+        return convertToDto(result, pageable);
     }
 
-    private ApiResponse convertDto(Page<Transaction> transactionPage, Pageable pageable) {
+    private ApiResponse convertToDto(Page<Transaction> transactionPage, Pageable pageable) {
         List<DtoTransactionResponse> resultDto = new ArrayList<>();
 
         for (Transaction transaction : transactionPage.getContent()) {
-            System.out.println("size : " + transaction.getTransactionDetailList().size());
             resultDto.add(new DtoTransactionResponse(transaction));
         }
         return new ApiResponse(
@@ -194,6 +196,7 @@ public class TransactionService {
                 new PageImpl<>(resultDto, pageable, transactionPage.getTotalElements()));
     }
 
+    // Fungsi untuk mendapatkan informasi transaksi berdasarkan ID Transaksi
     public ApiResponse getByIdItem(String idTransaction) {
         if (idTransaction == null) {
             return new ApiResponse(Utility.message("transaction_not_insert"));
@@ -209,6 +212,8 @@ public class TransactionService {
         }
     }
 
+    // Fungsi untuk membuat setiap barang yang dibeli oleh pelanggan bersifat unik,
+    // bahkan jika pengguna membeli barang yang sama dalam satu transaksi.
     private List<Item> distinctListTransactionalDetail(List<TransactionDetail> transactionDetailList) {
         List<Item> distinctList = new ArrayList<>();
 
@@ -229,6 +234,7 @@ public class TransactionService {
         return distinctList;
     }
 
+    // Fungsi untuk membuat ID Transaksi baru.
     private String getNewId(String idCashier, Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String formatDate = format.format(date);
