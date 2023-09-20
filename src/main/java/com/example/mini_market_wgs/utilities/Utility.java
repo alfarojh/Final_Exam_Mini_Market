@@ -1,12 +1,18 @@
 package com.example.mini_market_wgs.utilities;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Utility {
 
+    public static String message(String key, String param) {
+        String keyMessage = ResourceBundle.getBundle("messages").getString(key);
+        return keyMessage.replace("${param}", String.valueOf(param));
+    }
+
     public static String message(String key) {
-        return ResourceBundle.getBundle("messages", Locale.getDefault()).getString(key);
+        return ResourceBundle.getBundle("messages").getString(key);
     }
 
     /**

@@ -57,6 +57,6 @@ public class ItemRelational {
     }
 
     public void addCount() {
-        this.count += 1;
+        this.count ++;
     }
 }

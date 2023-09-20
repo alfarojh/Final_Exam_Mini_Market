@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -42,6 +43,7 @@ public class TransactionService {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Transactional
     public ApiResponse add(DtoTransactionRequest transactionRequest) {
         if (transactionRequest.getIdCustomer() == null) {
             return new ApiResponse(Utility.message("customer_not_insert"));
@@ -91,14 +93,14 @@ public class TransactionService {
                 transactionDetail.setTotalPrice(price * quantity);
                 totalPaid += price * quantity;
                 transactionDetailList.add(transactionDetail);
-                addRelational(transactionDetailList);
             }
         }
 
         if (totalPaid > transactionRequest.getTotalPayment()) {
-            return new ApiResponse(Utility.message("insufficient_money"));
+            return new ApiResponse(Utility.message("insufficient_money", String.valueOf(totalPaid)));
         }
 
+        addRelational(transactionDetailList);
         transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier()));
         transaction.setCashier(cashierOptional.get());
         transaction.setCustomer(customerOptional.get());
@@ -145,8 +147,8 @@ public class TransactionService {
 
     private void addRelational(List<TransactionDetail> transactionDetailList) {
         for (int indexTransactionFirst = 0; indexTransactionFirst < transactionDetailList.size() - 1; indexTransactionFirst++) {
+            Item item1 = transactionDetailList.get(indexTransactionFirst).getItem();
             for (int indexTransactionSecond = indexTransactionFirst + 1; indexTransactionSecond < transactionDetailList.size(); indexTransactionSecond++) {
-                Item item1 = transactionDetailList.get(indexTransactionFirst).getItem();
                 Item item2 = transactionDetailList.get(indexTransactionSecond).getItem();
 
                 if (item1.getIdItem().compareTo(item2.getIdItem()) < 0) {
