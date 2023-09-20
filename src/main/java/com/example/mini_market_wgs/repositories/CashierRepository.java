@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface CashierRepository extends JpaRepository<Cashier, Long> {
     Optional<Cashier> findFirstByIsDeletedIsFalseAndIdCashier(String idCashier);
 
+    Optional<Cashier> findFirstByOrderByIdCashierDesc();
+
     Page<Cashier> findAllByIsDeletedIsFalseOrderByName(Pageable pageable);
 }

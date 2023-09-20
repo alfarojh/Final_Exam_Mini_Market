@@ -14,6 +14,7 @@ import com.example.mini_market_wgs.repositories.TransactionRepository;
 import com.example.mini_market_wgs.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -41,6 +42,7 @@ public class Seed {
     private List<Cashier> cashierList = new ArrayList<>();
     private List<Item> itemList = new ArrayList<>();
 
+    @Transactional
     public ApiResponse allSeed() {
         if (customerRepository.count() == 0) {
             seedCustomer();
@@ -51,6 +53,7 @@ public class Seed {
         return new ApiResponse(Utility.message("success"));
     }
 
+    @Transactional
     public void seedCustomer() {
         customerList.add(new Customer("201201020001", 2012, "Alice", "087479720895"));
         customerList.add(new Customer("201301010001", 2013, "Bob", "083094894366"));
@@ -65,6 +68,7 @@ public class Seed {
         customerRepository.saveAll(customerList);
     }
 
+    @Transactional
     public void seedCashier() {
         cashierList.add(new Cashier("001", "Kate", "081123971600", "Bandung"));
         cashierList.add(new Cashier("002", "Liam", "082783009977", "Bandung"));
@@ -79,6 +83,7 @@ public class Seed {
         cashierRepository.saveAll(cashierList);
     }
 
+    @Transactional
     public void seedItem() {
         itemList.add(new Item("L00001", "Leo Kripik Kentang Rumput Laut 14 gr", 1_000));
         itemList.add(new Item("L00002", "Leo Kripik Kentang Sapi Panggang 14 gr", 1_000));
@@ -96,12 +101,13 @@ public class Seed {
         itemRepository.saveAll(itemList);
     }
 
+    @Transactional
     public void seedTransaction() {
         Random random = new Random();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             DtoTransactionRequest transactionRequest = new DtoTransactionRequest();
             List<DtoTransactionDetailRequest> transactionDetailRequestList = new ArrayList<>();
-            for (int j = 0; j < random.nextInt(5) + 2; j++) {
+            for (int j = 0; j < random.nextInt(5) + 1; j++) {
                 transactionDetailRequestList.add(new DtoTransactionDetailRequest(itemList.get(random.nextInt(itemList.size())).getIdItem(), random.nextInt(10) + 1));
             }
             int minDay = (int) LocalDate.of(2000, 1, 1).toEpochDay();

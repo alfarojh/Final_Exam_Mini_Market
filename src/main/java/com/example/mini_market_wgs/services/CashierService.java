@@ -34,7 +34,7 @@ public class CashierService {
             Cashier cashier = new Cashier();
 
             cashier.setName(cashierRequest.getName());
-            cashier.setIdCashier(String.format("%03d", cashierRepository.count() + 1));
+            cashier.setIdCashier(getNewId());
             cashier.setAddress(cashierRequest.getAddress());
             cashier.setPhoneNumber(cashierRequest.getPhoneNumber());
             cashierRepository.save(cashier);
@@ -136,5 +136,15 @@ public class CashierService {
                     Utility.message("success"),
                     new DtoCashierResponse(cashierOptional.get()));
         }
+    }
+
+    private String getNewId() {
+        Optional<Cashier> cashierOptional = cashierRepository.findFirstByOrderByIdCashierDesc();
+        int count = 1;
+
+        if (cashierOptional.isPresent()) {
+            count = Integer.parseInt(cashierOptional.get().getIdCashier()) + 1;
+        }
+        return String.format("%03d", count);
     }
 }
