@@ -91,15 +91,23 @@ public class CustomerService {
 
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Customer> result = customerRepository.findAllByIsDeletedIsFalseOrderByName(pageable);
+        return convertDto(customerRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
+    }
+
+    public ApiResponse getAllByName(String name, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        return convertDto(customerRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
+    }
+
+    private ApiResponse convertDto(Page<Customer> customerPage, Pageable pageable) {
         List<DtoCustomerResponse> resultDto = new ArrayList<>();
 
-        for (Customer customer : result.getContent()) {
+        for (Customer customer : customerPage.getContent()) {
             resultDto.add(new DtoCustomerResponse(customer));
         }
         return new ApiResponse(
                 Utility.message("success"),
-                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+                new PageImpl<>(resultDto, pageable, customerPage.getTotalElements()));
     }
 
     public ApiResponse getByIdCustomer(String idCustomer) {

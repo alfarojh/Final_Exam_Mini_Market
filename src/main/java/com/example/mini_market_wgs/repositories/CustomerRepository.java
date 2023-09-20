@@ -11,6 +11,10 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findFirstByIsDeletedIsFalseAndIdCustomer(String idCustomer);
+
     Optional<Customer> findFirstByIdCustomerContainingOrderByIdCustomerDesc(String idCustomer);
+
     Page<Customer> findAllByIsDeletedIsFalseOrderByName(Pageable pageable);
+
+    Page<Customer> findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(String name, Pageable pageable);
 }

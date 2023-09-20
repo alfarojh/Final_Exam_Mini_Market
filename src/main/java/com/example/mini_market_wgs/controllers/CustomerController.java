@@ -23,8 +23,14 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping("")
-    public ResponseEntity getCustomers(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.getAll(page, limit));
+    public ResponseEntity getCustomers(
+            @RequestParam(required = false) String name,
+            @RequestParam int page, @RequestParam int limit) {
+        if (name != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(customerService.getAllByName(name, page, limit));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(customerService.getAll(page, limit));
+        }
     }
 
     @GetMapping("/{idCustomer}")
