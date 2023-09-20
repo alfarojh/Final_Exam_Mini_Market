@@ -22,6 +22,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    // API untuk menampilkan daftar barang berdasarkan request.
     @GetMapping("")
     public ResponseEntity getItems(
             @RequestParam(required = false) String name,
@@ -37,6 +38,7 @@ public class ItemController {
         }
     }
 
+    // API untuk menampilkan daftar barang top berdasarkan request.
     @GetMapping("/top-item")
     public ResponseEntity getItemsTop(
             @RequestParam(required = false, name = "is_top3_relational") Boolean isTop,
@@ -50,11 +52,13 @@ public class ItemController {
         }
     }
 
+    // API untuk menampilkan informasi barang berdasarkan ID barang.
     @GetMapping("/{idItem}")
     public ResponseEntity getItemByIdItem(@PathVariable String idItem) {
         return ResponseEntity.status(HttpStatus.OK).body(itemService.getByIdItem(idItem));
     }
 
+    // API untuk membuat barang baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addItem(@RequestBody DtoItemRequest itemRequest) {
         ApiResponse apiResponse = itemService.add(itemRequest);
@@ -66,6 +70,7 @@ public class ItemController {
         }
     }
 
+    // API untuk memperbaru informasi barang berdasarkan request.
     @PutMapping("")
     public ResponseEntity updateDataItem(@RequestBody DtoItemRequest itemRequest) {
         ApiResponse apiResponse = itemService.updateData(itemRequest);
@@ -77,9 +82,10 @@ public class ItemController {
         }
     }
 
+    // API untuk menghapus barang berdasarkan ID Barang.
     @DeleteMapping("")
     public ResponseEntity deleteItem(@RequestBody DtoItemRequest itemRequest) {
-        ApiResponse apiResponse = itemService.delete(itemRequest.getIdItem());
+        ApiResponse apiResponse = itemService.deleteByIdItem(itemRequest.getIdItem());
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);

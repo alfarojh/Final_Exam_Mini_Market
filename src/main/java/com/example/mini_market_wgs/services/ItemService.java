@@ -28,6 +28,7 @@ public class ItemService {
     @Autowired
     private ItemRelationRepository itemRelationRepository;
 
+    // Fungsi untuk menambahkan barang baru.
     public ApiResponse add(DtoItemRequest itemRequest) {
         if (Utility.isNotAlphanumeric(itemRequest.getName())) {
             return new ApiResponse(Utility.message("name_invalid"));
@@ -48,6 +49,7 @@ public class ItemService {
         }
     }
 
+    // Fungsi untuk memperbarui informasi barang.
     public ApiResponse updateData(DtoItemRequest itemRequest) {
         if (itemRequest.getIdItem() == null) {
             return new ApiResponse(Utility.message("item_not_insert"));
@@ -69,7 +71,8 @@ public class ItemService {
         }
     }
 
-    public ApiResponse delete(String idItem) {
+    // Fungsi untuk mengahapus barang
+    public ApiResponse deleteByIdItem(String idItem) {
         if (idItem == null) {
             return new ApiResponse(Utility.message("item_not_insert"));
         }
@@ -89,22 +92,25 @@ public class ItemService {
         }
     }
 
+    // Fungsi untuk menampilkan daftar barang.
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        return convertDto(itemRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
+        return convertToDto(itemRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
     }
 
+    // Fungsi untuk menampilkan daftar barang berdasarkan nama barang.
     public ApiResponse getAllByName(String name, int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        return convertDto(itemRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
+        return convertToDto(itemRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
     }
 
+    // Fungsi untuk menampilkan daftar barang berdasarkan rentang harga.
     public ApiResponse getAllByPrice(Integer startPrice, Integer endPrice, int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        return convertDto(itemRepository.findAllByIsDeletedIsFalseAndPriceBetweenOrderByName(startPrice, endPrice, pageable), pageable);
+        return convertToDto(itemRepository.findAllByIsDeletedIsFalseAndPriceBetweenOrderByName(startPrice, endPrice, pageable), pageable);
     }
 
-    public ApiResponse convertDto(Page<Item> itemPage, Pageable pageable) {
+    public ApiResponse convertToDto(Page<Item> itemPage, Pageable pageable) {
         List<DtoItemResponse> resultDto = new ArrayList<>();
 
         for (Item item : itemPage.getContent()) {
@@ -115,10 +121,11 @@ public class ItemService {
                 new PageImpl<>(resultDto, pageable, itemPage.getTotalElements()));
     }
 
+    // Fungsi untuk menampilkan 3 barang yang sering dibeli.
     public ApiResponse getTop3() {
         List<DtoItemResponse> resultDto = new ArrayList<>();
 
-        for (Item item : itemRepository.findTop3ByOrderByQuantityPurchasedDesc()) {
+        for (Item item : itemRepository.findTop3ByIsDeletedIsFalseOrderByQuantityPurchasedDesc()) {
             resultDto.add(new DtoItemResponse(item));
         }
         return new ApiResponse(
@@ -127,6 +134,7 @@ public class ItemService {
 
     }
 
+    // Fungsi untuk menampilkan 3 pasangan barang yang sering dibeli secara bersamaan.
     public ApiResponse getTopItemRelational() {
         List<DtoItemRelationalResponse> itemList = new ArrayList<>();
 
@@ -138,6 +146,7 @@ public class ItemService {
                 itemList);
     }
 
+    // Fungsi untuk menampilkan 3 pasangan barang berdasarkan ID Barang yang sering dibeli secara bersamaan.
     public ApiResponse getTopItemRelationalByIdItem(String idItem) {
         List<DtoItemRelationalResponse> itemList = new ArrayList<>();
 
@@ -149,6 +158,7 @@ public class ItemService {
                 itemList);
     }
 
+    // Fungsi untuk menampilkan informasi barang berdasrakan ID Barang.
     public ApiResponse getByIdItem(String idItem) {
         if (idItem == null) {
             return new ApiResponse(Utility.message("item_not_insert"));
@@ -164,6 +174,7 @@ public class ItemService {
         }
     }
 
+    // Fungsi untuk membuat ID Barang baru.
     private String getNewId(String name) {
         String codeItem = name.substring(0, 1).toUpperCase();
         Optional<Item> itemOptional = itemRepository.findFirstByIdItemContainingOrderByIdItemDesc(codeItem);

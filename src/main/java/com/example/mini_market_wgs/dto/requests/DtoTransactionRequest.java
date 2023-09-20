@@ -2,7 +2,6 @@ package com.example.mini_market_wgs.dto.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
 import java.util.List;
 
 public class DtoTransactionRequest {

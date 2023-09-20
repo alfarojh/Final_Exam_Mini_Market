@@ -22,6 +22,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    // API untuk menampilkan daftar customer berdasarkan request.
     @GetMapping("")
     public ResponseEntity getCustomers(
             @RequestParam(required = false) String name,
@@ -33,11 +34,13 @@ public class CustomerController {
         }
     }
 
+    // API untuk menampilkan informasi kasir berdasarkan ID Customer.
     @GetMapping("/{idCustomer}")
     public ResponseEntity getCustomerByIdCustomer(@PathVariable String idCustomer) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.getByIdCustomer(idCustomer));
     }
 
+    // API untuk membuat customer baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addCustomer(@RequestBody DtoCustomerRequest customerRequest) {
         ApiResponse apiResponse = customerService.add(customerRequest);
@@ -49,6 +52,7 @@ public class CustomerController {
         }
     }
 
+    // API untuk memperbarui informasi customer berdasarkan request.
     @PutMapping("")
     public ResponseEntity updateDataCustomer(@RequestBody DtoCustomerRequest customerRequest) {
         ApiResponse apiResponse = customerService.updateData(customerRequest);
@@ -60,9 +64,10 @@ public class CustomerController {
         }
     }
 
+    // API untuk menghapus customer berdasarkan ID Customer.
     @DeleteMapping("")
     public ResponseEntity delete(@RequestBody DtoCustomerRequest customerRequest) {
-        ApiResponse apiResponse = customerService.delete(customerRequest.getIdCustomer());
+        ApiResponse apiResponse = customerService.deleteIdCustomer(customerRequest.getIdCustomer());
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);

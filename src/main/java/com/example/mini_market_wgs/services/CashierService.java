@@ -23,6 +23,7 @@ public class CashierService {
     @Autowired
     private CashierRepository cashierRepository;
 
+    // Fungsi untuk menambahkan kasir baru.
     public ApiResponse add(DtoCashierRequest cashierRequest) {
         if (Utility.isNotAlphanumeric(cashierRequest.getName())) {
             return new ApiResponse(Utility.message("name_invalid"));
@@ -45,6 +46,7 @@ public class CashierService {
         }
     }
 
+    // Fungsi untuk memperbarui informasi kasir.
     public ApiResponse updateDate(DtoCashierRequest cashierRequest) {
         if (cashierRequest.getIdCashier() == null) {
             return new ApiResponse(Utility.message("cashier_not_insert"));
@@ -72,7 +74,8 @@ public class CashierService {
         }
     }
 
-    public ApiResponse updateStatusResign(String idCashier) {
+    // Fungsi untuk memperbarui status resign kasir berdasarkan ID Kasir.
+    public ApiResponse updateStatusResignByIdCashier(String idCashier) {
         if (idCashier == null) {
             return new ApiResponse(Utility.message("cashier_not_insert"));
         }
@@ -91,7 +94,8 @@ public class CashierService {
         }
     }
 
-    public ApiResponse delete(String idCashier) {
+    // Fungsi untuk menghapus kasir berdasarkan ID Kasir.
+    public ApiResponse deleteByIdCashier(String idCashier) {
         if (idCashier == null) {
             return new ApiResponse(Utility.message("cashier_not_insert"));
         }
@@ -110,11 +114,13 @@ public class CashierService {
         }
     }
 
+    // Fungsi untuk menampilkan daftar kasir.
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         return convertDto(cashierRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
     }
 
+    // Fungsi untuk menampilkan daftar kasir berdasarkan nama kasir.
     public ApiResponse getAllByName(String name, int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         return convertDto(cashierRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
@@ -131,6 +137,7 @@ public class CashierService {
                 new PageImpl<>(resultDto, pageable, cashierPage.getTotalElements()));
     }
 
+    // Fungsi untuk menampilkan informasi kasir berdasarkan ID Kasir.
     public ApiResponse getByIdCashier(String idCashier) {
         if (idCashier == null) {
             return new ApiResponse(Utility.message("cashier_not_insert"));
@@ -146,6 +153,7 @@ public class CashierService {
         }
     }
 
+    // Fungsi untuk membuat ID Kasir baru.
     private String getNewId() {
         Optional<Cashier> cashierOptional = cashierRepository.findFirstByOrderByIdCashierDesc();
         int count = 1;

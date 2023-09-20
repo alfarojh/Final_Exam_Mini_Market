@@ -20,6 +20,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    // API untuk menampilkan daftar transaksi berdasarkan request.
     @GetMapping("")
     public ResponseEntity getItems(
             @RequestParam(required = false, name = "id_customer") String idCustomer,
@@ -33,11 +34,13 @@ public class TransactionController {
         }
     }
 
+    // API untuk menampilkan informasi transaksi berdasarkan ID Transaksi.
     @GetMapping("/{idTransaction}")
     public ResponseEntity getItemsByIdTransaction(@PathVariable String idTransaction) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.getByIdItem(idTransaction));
     }
 
+    // API untuk membuat transaksi baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addTransaction(@RequestBody DtoTransactionRequest transactionRequest) {
         ApiResponse apiResponse = transactionService.add(transactionRequest);

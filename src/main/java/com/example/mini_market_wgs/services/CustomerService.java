@@ -25,6 +25,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    // Fungsi untuk menambahkan customer baru.
     public ApiResponse add(DtoCustomerRequest customerRequest) {
         if (Utility.isNotAlphanumeric(customerRequest.getName())) {
             return new ApiResponse(Utility.message("name_invalid"));
@@ -46,6 +47,7 @@ public class CustomerService {
         }
     }
 
+    // Fungsi untuk memperbarui informasi customer.
     public ApiResponse updateData(DtoCustomerRequest customerRequest) {
         if (customerRequest.getIdCustomer() == null) {
             return new ApiResponse(Utility.message("customer_not_insert"));
@@ -69,7 +71,8 @@ public class CustomerService {
         }
     }
 
-    public ApiResponse delete(String idCustomer) {
+    // Fungsi untuk menhapus customer berdasarkan ID Customer.
+    public ApiResponse deleteIdCustomer(String idCustomer) {
         if (idCustomer == null) {
             return new ApiResponse(Utility.message("customer_not_insert"));
         }
@@ -88,11 +91,13 @@ public class CustomerService {
         }
     }
 
+    // Fungsi untuk menampilkan daftar customer.
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         return convertDto(customerRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
     }
 
+    // Fungsi untuk menampilkan daftar customer berdasarkan nama customer.
     public ApiResponse getAllByName(String name, int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         return convertDto(customerRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
@@ -109,6 +114,7 @@ public class CustomerService {
                 new PageImpl<>(resultDto, pageable, customerPage.getTotalElements()));
     }
 
+    // Fungsi untuk menampilkan informasi customer berdasarkan ID Customer.
     public ApiResponse getByIdCustomer(String idCustomer) {
         if (idCustomer == null) {
             return new ApiResponse(Utility.message("customer_not_insert"));
@@ -124,6 +130,7 @@ public class CustomerService {
         }
     }
 
+    // Fungsi untuk membuat ID Customer baru.
     private String getNewId() {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String date = format.format(new Timestamp(System.currentTimeMillis()));

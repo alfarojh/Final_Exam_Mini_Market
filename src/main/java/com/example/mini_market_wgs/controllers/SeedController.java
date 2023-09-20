@@ -14,6 +14,7 @@ public class SeedController {
     @Autowired
     private Seed seed;
 
+    // API untuk membuat seed baru.
     @PostMapping("")
     public ResponseEntity addTransaction() {
         return ResponseEntity.status(HttpStatus.CREATED).body(seed.allSeed());

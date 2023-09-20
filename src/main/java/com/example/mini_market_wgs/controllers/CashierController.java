@@ -23,6 +23,7 @@ public class CashierController {
     @Autowired
     private CashierService cashierService;
 
+    // API untuk menampilkan daftar kasir berdasarkan request.
     @GetMapping("")
     public ResponseEntity getCashiers(
             @RequestParam(required = false) String name,
@@ -34,11 +35,13 @@ public class CashierController {
         }
     }
 
+    // API untuk menampilkan informasi kasir berdasarkan ID Kasir.
     @GetMapping("/{idCashier}")
     public ResponseEntity getCashiersByIdCashier(@PathVariable String idCashier) {
         return ResponseEntity.status(HttpStatus.OK).body(cashierService.getByIdCashier(idCashier));
     }
 
+    // API untuk membuat kasir baru berdasarkan request.
     @PostMapping("")
     public ResponseEntity addCashier(@RequestBody DtoCashierRequest cashierRequest) {
         ApiResponse apiResponse = cashierService.add(cashierRequest);
@@ -50,6 +53,7 @@ public class CashierController {
         }
     }
 
+    // API untuk memperbarui informasi kasir berdasarkan request.
     @PutMapping("")
     public ResponseEntity updateDataCashier(@RequestBody DtoCashierRequest cashierRequest) {
         ApiResponse apiResponse = cashierService.updateDate(cashierRequest);
@@ -61,9 +65,10 @@ public class CashierController {
         }
     }
 
+    // API untuk memperbarui status resign kasir berdasarkan ID Kasir.
     @PatchMapping("")
     public ResponseEntity updateStatusCashier(@RequestBody DtoCashierRequest cashierRequest) {
-        ApiResponse apiResponse = cashierService.updateStatusResign(cashierRequest.getIdCashier());
+        ApiResponse apiResponse = cashierService.updateStatusResignByIdCashier(cashierRequest.getIdCashier());
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
@@ -72,9 +77,10 @@ public class CashierController {
         }
     }
 
+    // API untuk menghapus kasir berdasarkan ID Kasir.
     @DeleteMapping("")
     public ResponseEntity delete(@RequestBody DtoCashierRequest cashierRequest) {
-        ApiResponse apiResponse = cashierService.delete(cashierRequest.getIdCashier());
+        ApiResponse apiResponse = cashierService.deleteByIdCashier(cashierRequest.getIdCashier());
 
         if (apiResponse.getData() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
