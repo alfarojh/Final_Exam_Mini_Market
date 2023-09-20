@@ -28,9 +28,13 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(itemService.getAll(page, limit));
     }
 
-    @GetMapping("/top-3")
-    public ResponseEntity getItemsTop3() {
-        return ResponseEntity.status(HttpStatus.OK).body(itemService.getTop3());
+    @GetMapping("/topItem")
+    public ResponseEntity getItemsTop3(@RequestParam(required = false, name = "is_top") Boolean isTop) {
+        if (isTop != null && isTop) {
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.getTopItemRelational());
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.getTop3());
+        }
     }
 
     @GetMapping("/{idItem}")

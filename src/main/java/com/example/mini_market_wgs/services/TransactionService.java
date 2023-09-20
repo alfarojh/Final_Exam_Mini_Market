@@ -2,6 +2,7 @@ package com.example.mini_market_wgs.services;
 
 import com.example.mini_market_wgs.dto.requests.DtoTransactionDetailRequest;
 import com.example.mini_market_wgs.dto.requests.DtoTransactionRequest;
+import com.example.mini_market_wgs.dto.responses.DtoItemRelationalResponse;
 import com.example.mini_market_wgs.dto.responses.DtoTransactionResponse;
 import com.example.mini_market_wgs.models.ApiResponse;
 import com.example.mini_market_wgs.models.Cashier;

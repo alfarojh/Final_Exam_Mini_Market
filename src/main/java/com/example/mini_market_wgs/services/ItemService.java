@@ -2,10 +2,13 @@ package com.example.mini_market_wgs.services;
 
 import com.example.mini_market_wgs.dto.requests.DtoItemRequest;
 import com.example.mini_market_wgs.dto.responses.DtoCustomerResponse;
+import com.example.mini_market_wgs.dto.responses.DtoItemRelationalResponse;
 import com.example.mini_market_wgs.dto.responses.DtoItemResponse;
 import com.example.mini_market_wgs.models.ApiResponse;
 import com.example.mini_market_wgs.models.Customer;
 import com.example.mini_market_wgs.models.Item;
+import com.example.mini_market_wgs.models.ItemRelational;
+import com.example.mini_market_wgs.repositories.ItemRelationRepository;
 import com.example.mini_market_wgs.repositories.ItemRepository;
 import com.example.mini_market_wgs.utilities.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ import java.util.Optional;
 public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    private ItemRelationRepository itemRelationRepository;
 
     public ApiResponse add(DtoItemRequest itemRequest) {
         if (Utility.isNotAlphanumeric(itemRequest.getName())) {
@@ -111,6 +116,18 @@ public class ItemService {
                 resultDto);
 
     }
+
+    public ApiResponse getTopItemRelational() {
+        List<DtoItemRelationalResponse> itemList = new ArrayList<>();
+
+        for (ItemRelational itemRelational : itemRelationRepository.findTop3ByOrderByCountDesc()) {
+            itemList.add(new DtoItemRelationalResponse(itemRelational));
+        }
+        return new ApiResponse(
+                Utility.message("success"),
+                itemList);
+    }
+
     public ApiResponse getByIdItem(String idItem) {
         if (idItem == null) {
             return new ApiResponse(Utility.message("item_not_insert"));
