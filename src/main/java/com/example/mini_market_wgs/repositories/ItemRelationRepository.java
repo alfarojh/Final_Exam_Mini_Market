@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ItemRelationRepository extends JpaRepository<ItemRelational, Long> {
     List<ItemRelational> findTop3ByOrderByCountDesc();
+    List<ItemRelational> findTop3ByItem1_IdItemOrItem2_IdItemOrderByCountDesc(String idItem1, String idItem2);
     Optional<ItemRelational> findFirstByItem1AndItem2(Item item1, Item item2);
 }

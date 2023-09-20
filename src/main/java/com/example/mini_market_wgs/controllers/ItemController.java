@@ -29,9 +29,13 @@ public class ItemController {
     }
 
     @GetMapping("/topItem")
-    public ResponseEntity getItemsTop3(@RequestParam(required = false, name = "is_top") Boolean isTop) {
+    public ResponseEntity getItemsTop3(
+            @RequestParam(required = false, name = "is_top") Boolean isTop,
+            @RequestParam(required = false, name = "id_item") String idItem) {
         if (isTop != null && isTop) {
             return ResponseEntity.status(HttpStatus.OK).body(itemService.getTopItemRelational());
+        } else if (idItem != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.getTopItemRelationalByIdItem(idItem));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(itemService.getTop3());
         }

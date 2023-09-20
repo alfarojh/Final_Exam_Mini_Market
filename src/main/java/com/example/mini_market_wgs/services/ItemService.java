@@ -1,11 +1,9 @@
 package com.example.mini_market_wgs.services;
 
 import com.example.mini_market_wgs.dto.requests.DtoItemRequest;
-import com.example.mini_market_wgs.dto.responses.DtoCustomerResponse;
 import com.example.mini_market_wgs.dto.responses.DtoItemRelationalResponse;
 import com.example.mini_market_wgs.dto.responses.DtoItemResponse;
 import com.example.mini_market_wgs.models.ApiResponse;
-import com.example.mini_market_wgs.models.Customer;
 import com.example.mini_market_wgs.models.Item;
 import com.example.mini_market_wgs.models.ItemRelational;
 import com.example.mini_market_wgs.repositories.ItemRelationRepository;
@@ -121,6 +119,17 @@ public class ItemService {
         List<DtoItemRelationalResponse> itemList = new ArrayList<>();
 
         for (ItemRelational itemRelational : itemRelationRepository.findTop3ByOrderByCountDesc()) {
+            itemList.add(new DtoItemRelationalResponse(itemRelational));
+        }
+        return new ApiResponse(
+                Utility.message("success"),
+                itemList);
+    }
+
+    public ApiResponse getTopItemRelationalByIdItem(String idItem) {
+        List<DtoItemRelationalResponse> itemList = new ArrayList<>();
+
+        for (ItemRelational itemRelational : itemRelationRepository.findTop3ByItem1_IdItemOrItem2_IdItemOrderByCountDesc(idItem, idItem)) {
             itemList.add(new DtoItemRelationalResponse(itemRelational));
         }
         return new ApiResponse(
