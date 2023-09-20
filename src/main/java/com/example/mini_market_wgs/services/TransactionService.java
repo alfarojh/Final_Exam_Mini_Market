@@ -166,7 +166,7 @@ public class TransactionService {
         Page<Transaction> result = transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
         List<DtoTransactionResponse> resultDto = new ArrayList<>();
 
-        for (Transaction transaction: result.getContent()) {
+        for (Transaction transaction : result.getContent()) {
             System.out.println("size : " + transaction.getTransactionDetailList().size());
             resultDto.add(new DtoTransactionResponse(transaction));
         }
@@ -187,7 +187,7 @@ public class TransactionService {
                 transactionRepository.findAllByTransactionDateBetweenAndCustomer_IdCustomerOrderByTransactionDateDesc(formatStartDate, formatEndDate, idCustomer, pageable) :
                 transactionRepository.findAllByTransactionDateBetweenOrderByTransactionDateDesc(formatStartDate, formatEndDate, pageable);
 
-        for (Transaction transaction: result.getContent()) {
+        for (Transaction transaction : result.getContent()) {
             resultDto.add(new DtoTransactionResponse(transaction));
         }
         return new ApiResponse(
@@ -210,7 +210,7 @@ public class TransactionService {
         }
     }
 
-    private List<Item> distinctListTransactionalDetail (List<TransactionDetail> transactionDetailList) {
+    private List<Item> distinctListTransactionalDetail(List<TransactionDetail> transactionDetailList) {
         List<Item> distinctList = new ArrayList<>();
 
         for (TransactionDetail transactionDetail : transactionDetailList) {

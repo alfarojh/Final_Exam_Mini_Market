@@ -19,7 +19,7 @@ public class DtoItemResponse {
         this.idItem = item.getIdItem();
         this.name = item.getName();
         this.price = item.getPrice();
-        this.totalPurchase = item.getQuantityPurchased() - item.getQuantityReturned();
+        this.totalPurchase = item.getQuantityPurchased();
     }
 
     public String getIdItem() {

@@ -107,7 +107,7 @@ public class ItemService {
     public ApiResponse convertDto(Page<Item> itemPage, Pageable pageable) {
         List<DtoItemResponse> resultDto = new ArrayList<>();
 
-        for (Item item: itemPage.getContent()) {
+        for (Item item : itemPage.getContent()) {
             resultDto.add(new DtoItemResponse(item));
         }
         return new ApiResponse(
@@ -118,7 +118,7 @@ public class ItemService {
     public ApiResponse getTop3() {
         List<DtoItemResponse> resultDto = new ArrayList<>();
 
-        for (Item item: itemRepository.findTop3ByOrderByQuantityPurchasedDesc()) {
+        for (Item item : itemRepository.findTop3ByOrderByQuantityPurchasedDesc()) {
             resultDto.add(new DtoItemResponse(item));
         }
         return new ApiResponse(

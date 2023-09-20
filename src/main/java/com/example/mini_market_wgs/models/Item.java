@@ -4,13 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class Item extends BaseModel{
+public class Item extends BaseModel {
     @Column(unique = true)
     private String idItem;
     private String name;
     private Integer price;
     private Integer quantityPurchased = 0;
-    private Integer quantityReturned = 0;
 
     public Item() {
         // Do Nothing
@@ -56,12 +55,5 @@ public class Item extends BaseModel{
 
     public void addQuantityPurchased(int quantityPurchased) {
         this.quantityPurchased += quantityPurchased;
-    }
-    public Integer getQuantityReturned() {
-        return quantityReturned;
-    }
-
-    public void setQuantityReturned(Integer quantityReturned) {
-        this.quantityReturned = quantityReturned;
     }
 }

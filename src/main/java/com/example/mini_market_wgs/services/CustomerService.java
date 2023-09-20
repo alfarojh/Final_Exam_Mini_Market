@@ -36,7 +36,6 @@ public class CustomerService {
             Customer customer = new Customer();
 
             customer.setIdCustomer(getNewId());
-            customer.setYear(year);
             customer.setName(customerRequest.getName());
             customer.setPhoneNumber(customerRequest.getPhoneNumber());
             customerRepository.save(customer);

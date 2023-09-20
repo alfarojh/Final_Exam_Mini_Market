@@ -18,7 +18,7 @@ public class Utility {
      * Nama yang valid hanya mengandung huruf (a-z, A-Z), angka (0-9), dan spasi.
      *
      * @param input Nama yang akan diperiksa.
-     * @return      true jika nama valid, false jika tidak valid.
+     * @return true jika nama valid, false jika tidak valid.
      */
     public static boolean isNotAlphanumeric(String input) {
         return (input == null) || !input.matches("[a-zA-Z0-9\\s]+");

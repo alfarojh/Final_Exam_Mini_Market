@@ -8,9 +8,7 @@ import com.example.mini_market_wgs.models.Customer;
 import com.example.mini_market_wgs.models.Item;
 import com.example.mini_market_wgs.repositories.CashierRepository;
 import com.example.mini_market_wgs.repositories.CustomerRepository;
-import com.example.mini_market_wgs.repositories.ItemRelationRepository;
 import com.example.mini_market_wgs.repositories.ItemRepository;
-import com.example.mini_market_wgs.repositories.TransactionRepository;
 import com.example.mini_market_wgs.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,21 +24,17 @@ import java.util.Random;
 @Service
 public class Seed {
     @Autowired
-    private TransactionRepository transactionRepository;
-    @Autowired
     private CustomerRepository customerRepository;
     @Autowired
     private CashierRepository cashierRepository;
-    @Autowired
-    private ItemRelationRepository itemRelationRepository;
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
     private TransactionService transactionService;
 
-    private List<Customer> customerList = new ArrayList<>();
-    private List<Cashier> cashierList = new ArrayList<>();
-    private List<Item> itemList = new ArrayList<>();
+    private final List<Customer> customerList = new ArrayList<>();
+    private final List<Cashier> cashierList = new ArrayList<>();
+    private final List<Item> itemList = new ArrayList<>();
 
     @Transactional
     public ApiResponse allSeed() {
@@ -55,16 +49,16 @@ public class Seed {
 
     @Transactional
     public void seedCustomer() {
-        customerList.add(new Customer("201201020001", 2012, "Alice", "087479720895"));
-        customerList.add(new Customer("201301010001", 2013, "Bob", "083094894366"));
-        customerList.add(new Customer("201401010001", 2014, "Carol", "083094720908"));
-        customerList.add(new Customer("201501010001", 2015, "David", "087710899362"));
-        customerList.add(new Customer("201601010001", 2016, "Emily", "085725161834"));
-        customerList.add(new Customer("201701010001", 2017, "Frank", "082965955892"));
-        customerList.add(new Customer("201801010001", 2018, "Grace", "080340287522"));
-        customerList.add(new Customer("201901010001", 2019, "Henry", "085841925417"));
-        customerList.add(new Customer("202001010001", 2020, "Isabella", "088333813173"));
-        customerList.add(new Customer("202101010001", 2021, "Jack", "082470122357"));
+        customerList.add(new Customer("201201020001", "Alice", "087479720895"));
+        customerList.add(new Customer("201301010001", "Bob", "083094894366"));
+        customerList.add(new Customer("201401010001", "Carol", "083094720908"));
+        customerList.add(new Customer("201501010001", "David", "087710899362"));
+        customerList.add(new Customer("201601010001", "Emily", "085725161834"));
+        customerList.add(new Customer("201701010001", "Frank", "082965955892"));
+        customerList.add(new Customer("201801010001", "Grace", "080340287522"));
+        customerList.add(new Customer("201901010001", "Henry", "085841925417"));
+        customerList.add(new Customer("202001010001", "Isabella", "088333813173"));
+        customerList.add(new Customer("202101010001", "Jack", "082470122357"));
         customerRepository.saveAll(customerList);
     }
 

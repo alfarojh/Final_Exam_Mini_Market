@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import java.util.Date;
 
 @Entity
-public class Cashier extends BaseModel{
+public class Cashier extends BaseModel {
     @Column(unique = true, name = "id_cashier")
     private String idCashier;
     private String name;
