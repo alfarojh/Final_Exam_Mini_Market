@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -119,35 +121,6 @@ public class TransactionService {
         );
     }
 
-    public ApiResponse getAll(int page, int limit) {
-        Pageable pageable = PageRequest.of(page, limit);
-        Page<Transaction> result = transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
-        List<DtoTransactionResponse> resultDto = new ArrayList<>();
-
-        for (Transaction transaction: result.getContent()) {
-            System.out.println("size : " + transaction.getTransactionDetailList().size());
-            resultDto.add(new DtoTransactionResponse(transaction));
-        }
-        return new ApiResponse(
-                Utility.message("success"),
-                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
-    }
-
-    public ApiResponse getByIdItem(String idTransaction) {
-        if (idTransaction == null) {
-            return new ApiResponse(Utility.message("transaction_not_insert"));
-        }
-        Optional<Transaction> transactionOptional = transactionRepository.findFirstByIdTransaction(idTransaction);
-
-        if (!transactionOptional.isPresent()) {
-            return new ApiResponse(Utility.message("item_invalid"));
-        } else {
-            return new ApiResponse(
-                    Utility.message("success"),
-                    new DtoTransactionResponse(transactionOptional.get()));
-        }
-    }
-
     private void addRelational(List<TransactionDetail> transactionDetailList) {
         List<Item> distinctItemList = distinctListTransactionalDetail(transactionDetailList);
 
@@ -185,6 +158,56 @@ public class TransactionService {
                     }
                 }
             }
+        }
+    }
+
+    public ApiResponse getAll(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Transaction> result = transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
+        List<DtoTransactionResponse> resultDto = new ArrayList<>();
+
+        for (Transaction transaction: result.getContent()) {
+            System.out.println("size : " + transaction.getTransactionDetailList().size());
+            resultDto.add(new DtoTransactionResponse(transaction));
+        }
+        return new ApiResponse(
+                Utility.message("success"),
+                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+    }
+
+    public ApiResponse getAllByDate(int page, int limit, String startDate, String endDate) {
+        LocalDate date = LocalDate.parse(startDate);
+        Date formatStartDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        date = LocalDate.parse(endDate);
+        Date formatEndDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        System.out.println("Date : " + formatStartDate);
+        System.out.println("Date : " + formatEndDate);
+
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Transaction> result = transactionRepository.findAllByTransactionDateBetweenOrderByTransactionDateDesc(formatStartDate, formatEndDate, pageable);
+        List<DtoTransactionResponse> resultDto = new ArrayList<>();
+
+        for (Transaction transaction: result.getContent()) {
+            System.out.println("size : " + transaction.getTransactionDetailList().size());
+            resultDto.add(new DtoTransactionResponse(transaction));
+        }
+        return new ApiResponse(
+                Utility.message("success"),
+                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+    }
+
+    public ApiResponse getByIdItem(String idTransaction) {
+        if (idTransaction == null) {
+            return new ApiResponse(Utility.message("transaction_not_insert"));
+        }
+        Optional<Transaction> transactionOptional = transactionRepository.findFirstByIdTransaction(idTransaction);
+
+        if (!transactionOptional.isPresent()) {
+            return new ApiResponse(Utility.message("item_invalid"));
+        } else {
+            return new ApiResponse(
+                    Utility.message("success"),
+                    new DtoTransactionResponse(transactionOptional.get()));
         }
     }
 

@@ -22,8 +22,15 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping("")
-    public ResponseEntity getItems(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll(page, limit));
+    public ResponseEntity getItems(
+            @RequestParam(required = false, name = "start_date") String startDate,
+            @RequestParam(required = false, name = "end_date") String endDate,
+            @RequestParam int page, @RequestParam int limit) {
+        if (startDate != null && endDate != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAllByDate(page, limit, startDate, endDate));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll(page, limit));
+        }
     }
 
     @GetMapping("/{idTransaction}")
