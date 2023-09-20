@@ -1,6 +1,5 @@
 package com.example.mini_market_wgs.repositories;
 
-import com.example.mini_market_wgs.models.Cashier;
 import com.example.mini_market_wgs.models.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,10 +1,8 @@
 package com.example.mini_market_wgs.services;
 
 import com.example.mini_market_wgs.dto.requests.DtoCustomerRequest;
-import com.example.mini_market_wgs.dto.responses.DtoCashierResponse;
 import com.example.mini_market_wgs.dto.responses.DtoCustomerResponse;
 import com.example.mini_market_wgs.models.ApiResponse;
-import com.example.mini_market_wgs.models.Cashier;
 import com.example.mini_market_wgs.models.Customer;
 import com.example.mini_market_wgs.repositories.CustomerRepository;
 import com.example.mini_market_wgs.utilities.Utility;

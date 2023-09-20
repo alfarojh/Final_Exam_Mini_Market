@@ -1,6 +1,5 @@
 package com.example.mini_market_wgs.controllers;
 
-import com.example.mini_market_wgs.dto.requests.DtoCashierRequest;
 import com.example.mini_market_wgs.dto.requests.DtoCustomerRequest;
 import com.example.mini_market_wgs.models.ApiResponse;
 import com.example.mini_market_wgs.services.CustomerService;

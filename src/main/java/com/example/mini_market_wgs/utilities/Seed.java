@@ -6,7 +6,6 @@ import com.example.mini_market_wgs.models.ApiResponse;
 import com.example.mini_market_wgs.models.Cashier;
 import com.example.mini_market_wgs.models.Customer;
 import com.example.mini_market_wgs.models.Item;
-import com.example.mini_market_wgs.models.TransactionDetail;
 import com.example.mini_market_wgs.repositories.CashierRepository;
 import com.example.mini_market_wgs.repositories.CustomerRepository;
 import com.example.mini_market_wgs.repositories.ItemRelationRepository;
