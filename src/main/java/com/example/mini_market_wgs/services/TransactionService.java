@@ -24,13 +24,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -106,7 +104,7 @@ public class TransactionService {
 
         addRelational(transactionDetailList);
         transaction.setTransactionDate(transactionRequest.getTransactionDate());
-        transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier()));
+        transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier(), transactionRequest.getTransactionDate()));
         transaction.setCashier(cashierOptional.get());
         transaction.setCustomer(customerOptional.get());
         transaction.setTransactionDetailList(transactionDetailList);
@@ -123,7 +121,7 @@ public class TransactionService {
 
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Transaction> result = transactionRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Transaction> result = transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
         List<DtoTransactionResponse> resultDto = new ArrayList<>();
 
         for (Transaction transaction: result.getContent()) {
@@ -211,10 +209,10 @@ public class TransactionService {
         return distinctList;
     }
 
-    private String getNewId(String idCashier) {
+    private String getNewId(String idCashier, Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String date = format.format(new Timestamp(System.currentTimeMillis()));
-        Optional<Transaction> transactionOptional = transactionRepository.findFirstByIdTransactionContainingOrderByIdTransactionDesc(date + idCashier);
+        String formatDate = format.format(date);
+        Optional<Transaction> transactionOptional = transactionRepository.findFirstByIdTransactionContainingOrderByIdTransactionDesc(formatDate + idCashier);
         int count = 1;
 
         if (transactionOptional.isPresent()) {
@@ -222,6 +220,6 @@ public class TransactionService {
             count = Integer.parseInt(idTransaction.substring(11)) + 1;
         }
 
-        return String.format("%s%s%03d", date, idCashier, count);
+        return String.format("%s%s%03d", formatDate, idCashier, count);
     }
 }
