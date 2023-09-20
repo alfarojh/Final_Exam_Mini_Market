@@ -25,6 +25,7 @@ public class Transaction {
     private String idTransaction;
     @CreationTimestamp
     private Date createdAt;
+    private Date transactionDate;
     @ManyToOne
     @JoinColumn(name = "id_cashier", referencedColumnName = "id")
     private Cashier cashier;
@@ -63,6 +64,14 @@ public class Transaction {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     public Cashier getCashier() {

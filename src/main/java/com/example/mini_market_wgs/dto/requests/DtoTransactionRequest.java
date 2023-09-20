@@ -1,10 +1,14 @@
 package com.example.mini_market_wgs.dto.requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
 import java.util.List;
 
 public class DtoTransactionRequest {
+    @JsonProperty("transaction_date")
+    private Date transactionDate;
     @JsonProperty("id_transaction")
     private String idTransaction;
     @JsonProperty("id_customer")
@@ -15,6 +19,14 @@ public class DtoTransactionRequest {
     private Integer totalPayment;
     @JsonProperty("item_list")
     private List<DtoTransactionDetailRequest> transactionDetailRequests;
+
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
 
     public String getIdTransaction() {
         return idTransaction;

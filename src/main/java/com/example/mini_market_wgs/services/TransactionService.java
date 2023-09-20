@@ -27,8 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -98,9 +100,12 @@ public class TransactionService {
 
         if (totalPaid > transactionRequest.getTotalPayment()) {
             return new ApiResponse(Utility.message("insufficient_money", String.valueOf(totalPaid)));
+        } else if (transactionRequest.getTransactionDate() == null) {
+            transactionRequest.setTransactionDate(new Date());
         }
 
         addRelational(transactionDetailList);
+        transaction.setTransactionDate(transactionRequest.getTransactionDate());
         transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier()));
         transaction.setCashier(cashierOptional.get());
         transaction.setCustomer(customerOptional.get());
@@ -146,10 +151,13 @@ public class TransactionService {
     }
 
     private void addRelational(List<TransactionDetail> transactionDetailList) {
-        for (int indexTransactionFirst = 0; indexTransactionFirst < transactionDetailList.size() - 1; indexTransactionFirst++) {
-            Item item1 = transactionDetailList.get(indexTransactionFirst).getItem();
-            for (int indexTransactionSecond = indexTransactionFirst + 1; indexTransactionSecond < transactionDetailList.size(); indexTransactionSecond++) {
-                Item item2 = transactionDetailList.get(indexTransactionSecond).getItem();
+        List<Item> distinctItemList = distinctListTransactionalDetail(transactionDetailList);
+
+        for (int indexTransactionFirst = 0; indexTransactionFirst < distinctItemList.size() - 1; indexTransactionFirst++) {
+            Item item1 = distinctItemList.get(indexTransactionFirst);
+
+            for (int indexTransactionSecond = indexTransactionFirst + 1; indexTransactionSecond < distinctItemList.size(); indexTransactionSecond++) {
+                Item item2 = distinctItemList.get(indexTransactionSecond);
 
                 if (item1.getIdItem().compareTo(item2.getIdItem()) < 0) {
                     Optional<ItemRelational> itemRelationalOptional = itemRelationRepository.findFirstByItem1AndItem2(item1, item2);
@@ -180,6 +188,27 @@ public class TransactionService {
                 }
             }
         }
+    }
+
+    private List<Item> distinctListTransactionalDetail (List<TransactionDetail> transactionDetailList) {
+        List<Item> distinctList = new ArrayList<>();
+
+        for (TransactionDetail transactionDetail : transactionDetailList) {
+            boolean isDistinct = true;
+            int index = 0;
+
+            while (isDistinct && index < distinctList.size()) {
+                if (transactionDetail.getItem().getIdItem().equals(distinctList.get(index).getIdItem())) {
+                    isDistinct = false;
+                }
+                index++;
+            }
+            System.out.println("index : " + index + ", " + "size : " + distinctList.size());
+            if (isDistinct) {
+                distinctList.add(transactionDetail.getItem());
+            }
+        }
+        return distinctList;
     }
 
     private String getNewId(String idCashier) {

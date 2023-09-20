@@ -16,7 +16,10 @@ import com.example.mini_market_wgs.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -102,7 +105,14 @@ public class Seed {
             for (int j = 0; j < random.nextInt(5) + 2; j++) {
                 transactionDetailRequestList.add(new DtoTransactionDetailRequest(itemList.get(random.nextInt(itemList.size())).getIdItem(), random.nextInt(10) + 1));
             }
+            int minDay = (int) LocalDate.of(2000, 1, 1).toEpochDay();
+            int maxDay = (int) LocalDate.of(2023, 1, 1).toEpochDay();
+            long randomDay = minDay + random.nextInt(maxDay - minDay);
 
+            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+            Date date = Date.from(randomBirthDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            transactionRequest.setTransactionDate(date);
             transactionRequest.setIdCashier(cashierList.get(random.nextInt(cashierList.size())).getIdCashier());
             transactionRequest.setIdCustomer(customerList.get(random.nextInt(customerList.size())).getIdCustomer());
             transactionRequest.setTransactionDetailRequests(transactionDetailRequestList);

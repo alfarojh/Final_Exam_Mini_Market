@@ -12,9 +12,9 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DtoTransactionResponse {
-    @JsonProperty("created_at")
+    @JsonProperty("transaction_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date createdAt;
+    private Date transactionDate;
     @JsonProperty("id_transaction")
     private String idTransaction;
     @JsonProperty("name_customer")
@@ -31,6 +31,7 @@ public class DtoTransactionResponse {
     private Integer totalReturned;
 
     public DtoTransactionResponse(Transaction transaction) {
+        this.transactionDate = transaction.getTransactionDate();
         this.idTransaction = transaction.getIdTransaction();
         this.nameCustomer = transaction.getCustomer().getName();
         this.nameCashier = transaction.getCashier().getName();
@@ -38,18 +39,17 @@ public class DtoTransactionResponse {
         this.totalPaid = transaction.getTotalPaid();
         this.totalReturned = transaction.getTotalReturned();
         this.transactionDetailResponses = new ArrayList<>();
-        this.createdAt = transaction.getCreatedAt();
         for (TransactionDetail transactionDetail : transaction.getTransactionDetailList()) {
             transactionDetailResponses.add(new DtoTransactionDetailResponse(transactionDetail));
         }
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     public String getIdTransaction() {
