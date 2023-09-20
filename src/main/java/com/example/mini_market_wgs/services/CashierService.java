@@ -112,15 +112,23 @@ public class CashierService {
 
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Cashier> result = cashierRepository.findAllByIsDeletedIsFalseOrderByName(pageable);
+        return convertDto(cashierRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
+    }
+
+    public ApiResponse getAllByName(String name, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        return convertDto(cashierRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
+    }
+
+    private ApiResponse convertDto(Page<Cashier> cashierPage, Pageable pageable) {
         List<DtoCashierResponse> resultDto = new ArrayList<>();
 
-        for (Cashier cashier : result.getContent()) {
+        for (Cashier cashier : cashierPage.getContent()) {
             resultDto.add(new DtoCashierResponse(cashier));
         }
         return new ApiResponse(
                 Utility.message("success"),
-                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+                new PageImpl<>(resultDto, pageable, cashierPage.getTotalElements()));
     }
 
     public ApiResponse getByIdCashier(String idCashier) {

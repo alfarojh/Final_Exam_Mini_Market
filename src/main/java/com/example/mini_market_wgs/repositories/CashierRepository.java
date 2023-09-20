@@ -13,4 +13,6 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
     Optional<Cashier> findFirstByOrderByIdCashierDesc();
 
     Page<Cashier> findAllByIsDeletedIsFalseOrderByName(Pageable pageable);
+
+    Page<Cashier> findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(String name, Pageable pageable);
 }

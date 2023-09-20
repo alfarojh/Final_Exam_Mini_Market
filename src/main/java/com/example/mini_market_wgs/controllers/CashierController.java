@@ -24,8 +24,14 @@ public class CashierController {
     private CashierService cashierService;
 
     @GetMapping("")
-    public ResponseEntity getCashiers(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(cashierService.getAll(page, limit));
+    public ResponseEntity getCashiers(
+            @RequestParam(required = false) String name,
+            @RequestParam int page, @RequestParam int limit) {
+        if (name != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cashierService.getAllByName(name, page, limit));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(cashierService.getAll(page, limit));
+        }
     }
 
     @GetMapping("/{idCashier}")
