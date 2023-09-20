@@ -19,7 +19,7 @@ public class DtoCashierRequest {
     }
 
     public void setIdCashier(String idCashier) {
-        this.idCashier = idCashier;
+        this.idCashier = idCashier.trim();
     }
 
     public String getName() {
@@ -27,7 +27,7 @@ public class DtoCashierRequest {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public String getPhoneNumber() {
@@ -35,7 +35,7 @@ public class DtoCashierRequest {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber.trim();
     }
 
     public String getAddress() {
@@ -43,7 +43,7 @@ public class DtoCashierRequest {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = address.trim();
     }
 
     public Boolean getResign() {

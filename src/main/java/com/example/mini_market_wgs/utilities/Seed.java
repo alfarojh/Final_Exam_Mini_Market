@@ -98,20 +98,17 @@ public class Seed {
     @Transactional
     public void seedTransaction() {
         Random random = new Random();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
             DtoTransactionRequest transactionRequest = new DtoTransactionRequest();
             List<DtoTransactionDetailRequest> transactionDetailRequestList = new ArrayList<>();
             for (int j = 0; j < random.nextInt(5) + 1; j++) {
                 transactionDetailRequestList.add(new DtoTransactionDetailRequest(itemList.get(random.nextInt(itemList.size())).getIdItem(), random.nextInt(10) + 1));
             }
-            int minDay = (int) LocalDate.of(2000, 1, 1).toEpochDay();
-            int maxDay = (int) LocalDate.of(2023, 1, 1).toEpochDay();
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
+            int startDate = (int) LocalDate.of(2000, 1, 1).toEpochDay();
+            int endDate = (int) LocalDate.of(2023, 1, 1).toEpochDay();
+            LocalDate randomDate = LocalDate.ofEpochDay(startDate + random.nextInt(endDate - startDate));
 
-            LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
-            Date date = Date.from(randomBirthDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            transactionRequest.setTransactionDate(date);
+            transactionRequest.setTransactionDate(String.valueOf(randomDate));
             transactionRequest.setIdCashier(cashierList.get(random.nextInt(cashierList.size())).getIdCashier());
             transactionRequest.setIdCustomer(customerList.get(random.nextInt(customerList.size())).getIdCustomer());
             transactionRequest.setTransactionDetailRequests(transactionDetailRequestList);

@@ -15,7 +15,7 @@ public class DtoItemRequest {
     }
 
     public void setIdItem(String idItem) {
-        this.idItem = idItem;
+        this.idItem = idItem.trim();
     }
 
     public String getName() {
@@ -23,7 +23,7 @@ public class DtoItemRequest {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public Integer getPrice() {

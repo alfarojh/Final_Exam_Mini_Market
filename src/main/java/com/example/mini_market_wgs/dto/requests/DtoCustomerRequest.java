@@ -15,7 +15,7 @@ public class DtoCustomerRequest {
     }
 
     public void setIdCustomer(String idCustomer) {
-        this.idCustomer = idCustomer;
+        this.idCustomer = idCustomer.trim();
     }
 
     public String getName() {
@@ -23,7 +23,7 @@ public class DtoCustomerRequest {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public String getPhoneNumber() {
@@ -31,6 +31,6 @@ public class DtoCustomerRequest {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber.trim();
     }
 }

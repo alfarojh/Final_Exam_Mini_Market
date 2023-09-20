@@ -6,17 +6,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DtoItemRelationalResponse {
-    @JsonProperty("name_item_1")
+    @JsonProperty("id_item1")
+    private String idItem1;
+    @JsonProperty("name_item1")
     private String nameItem1;
-    @JsonProperty("name_item_2")
+    @JsonProperty("id_item2")
+    private String idItem2;
+    @JsonProperty("name_item2")
     private String nameItem2;
     @JsonProperty("purchased")
     private int purchased;
 
     public DtoItemRelationalResponse(ItemRelational itemRelational) {
+        this.idItem1 = itemRelational.getItem1().getIdItem();
         this.nameItem1 = itemRelational.getItem1().getName();
+        this.idItem2 = itemRelational.getItem2().getIdItem();
         this.nameItem2 = itemRelational.getItem2().getName();
         this.purchased = itemRelational.getCount();
+    }
+
+    public String getIdItem1() {
+        return idItem1;
+    }
+
+    public void setIdItem1(String idItem1) {
+        this.idItem1 = idItem1;
     }
 
     public String getNameItem1() {
@@ -25,6 +39,14 @@ public class DtoItemRelationalResponse {
 
     public void setNameItem1(String nameItem1) {
         this.nameItem1 = nameItem1;
+    }
+
+    public String getIdItem2() {
+        return idItem2;
+    }
+
+    public void setIdItem2(String idItem2) {
+        this.idItem2 = idItem2;
     }
 
     public String getNameItem2() {

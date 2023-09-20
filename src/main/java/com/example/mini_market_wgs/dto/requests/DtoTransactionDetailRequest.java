@@ -22,7 +22,7 @@ public class DtoTransactionDetailRequest {
     }
 
     public void setIdItem(String idItem) {
-        this.idItem = idItem;
+        this.idItem = idItem.trim();
     }
 
     public Integer getQuantity() {

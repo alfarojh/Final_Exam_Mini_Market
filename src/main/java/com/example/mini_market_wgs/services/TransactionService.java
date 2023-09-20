@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -98,15 +99,18 @@ public class TransactionService {
             }
         }
 
+        Date date;
         if (totalPaid > transactionRequest.getTotalPayment()) {
             return new ApiResponse(Utility.message("insufficient_money", String.valueOf(totalPaid)));
         } else if (transactionRequest.getTransactionDate() == null) {
-            transactionRequest.setTransactionDate(new Date());
+            date = new Date();
+        } else {
+            date = Date.from(Instant.parse(transactionRequest.getTransactionDate() + "T00:00:00Z"));
         }
 
         addRelational(transactionDetailList);
-        transaction.setTransactionDate(transactionRequest.getTransactionDate());
-        transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier(), transactionRequest.getTransactionDate()));
+        transaction.setTransactionDate(date);
+        transaction.setIdTransaction(getNewId(cashierOptional.get().getIdCashier(), date));
         transaction.setCashier(cashierOptional.get());
         transaction.setCustomer(customerOptional.get());
         transaction.setTransactionDetailList(transactionDetailList);
@@ -163,16 +167,7 @@ public class TransactionService {
 
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Transaction> result = transactionRepository.findAllByOrderByTransactionDateDesc(pageable);
-        List<DtoTransactionResponse> resultDto = new ArrayList<>();
-
-        for (Transaction transaction : result.getContent()) {
-            System.out.println("size : " + transaction.getTransactionDetailList().size());
-            resultDto.add(new DtoTransactionResponse(transaction));
-        }
-        return new ApiResponse(
-                Utility.message("success"),
-                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+        return convertDto(transactionRepository.findAllByOrderByTransactionDateDesc(pageable), pageable);
     }
 
     public ApiResponse getAllByDate(int page, int limit, String startDate, String endDate, String idCustomer) {
@@ -182,17 +177,23 @@ public class TransactionService {
         Date formatEndDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         Pageable pageable = PageRequest.of(page, limit);
-        List<DtoTransactionResponse> resultDto = new ArrayList<>();
         Page<Transaction> result = idCustomer != null ?
                 transactionRepository.findAllByTransactionDateBetweenAndCustomer_IdCustomerOrderByTransactionDateDesc(formatStartDate, formatEndDate, idCustomer, pageable) :
                 transactionRepository.findAllByTransactionDateBetweenOrderByTransactionDateDesc(formatStartDate, formatEndDate, pageable);
 
-        for (Transaction transaction : result.getContent()) {
+        return convertDto(result, pageable);
+    }
+
+    private ApiResponse convertDto(Page<Transaction> transactionPage, Pageable pageable) {
+        List<DtoTransactionResponse> resultDto = new ArrayList<>();
+
+        for (Transaction transaction : transactionPage.getContent()) {
+            System.out.println("size : " + transaction.getTransactionDetailList().size());
             resultDto.add(new DtoTransactionResponse(transaction));
         }
         return new ApiResponse(
                 Utility.message("success"),
-                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+                new PageImpl<>(resultDto, pageable, transactionPage.getTotalElements()));
     }
 
     public ApiResponse getByIdItem(String idTransaction) {
@@ -223,7 +224,6 @@ public class TransactionService {
                 }
                 index++;
             }
-            System.out.println("index : " + index + ", " + "size : " + distinctList.size());
             if (isDistinct) {
                 distinctList.add(transactionDetail.getItem());
             }

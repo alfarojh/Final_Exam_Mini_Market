@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DtoTransactionRequest {
     @JsonProperty("transaction_date")
-    private Date transactionDate;
+    private String transactionDate;
     @JsonProperty("id_transaction")
     private String idTransaction;
     @JsonProperty("id_customer")
@@ -19,12 +19,12 @@ public class DtoTransactionRequest {
     @JsonProperty("item_list")
     private List<DtoTransactionDetailRequest> transactionDetailRequests;
 
-    public Date getTransactionDate() {
+    public String getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setTransactionDate(String transactionDate) {
+        this.transactionDate = transactionDate.trim();
     }
 
     public String getIdTransaction() {
@@ -32,7 +32,7 @@ public class DtoTransactionRequest {
     }
 
     public void setIdTransaction(String idTransaction) {
-        this.idTransaction = idTransaction;
+        this.idTransaction = idTransaction.trim();
     }
 
     public String getIdCustomer() {
@@ -40,7 +40,7 @@ public class DtoTransactionRequest {
     }
 
     public void setIdCustomer(String idCustomer) {
-        this.idCustomer = idCustomer;
+        this.idCustomer = idCustomer.trim();
     }
 
     public String getIdCashier() {
@@ -48,7 +48,7 @@ public class DtoTransactionRequest {
     }
 
     public void setIdCashier(String idCashier) {
-        this.idCashier = idCashier;
+        this.idCashier = idCashier.trim();
     }
 
     public Integer getTotalPayment() {
