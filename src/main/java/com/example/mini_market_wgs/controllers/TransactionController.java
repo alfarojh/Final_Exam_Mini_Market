@@ -23,11 +23,12 @@ public class TransactionController {
 
     @GetMapping("")
     public ResponseEntity getItems(
+            @RequestParam(required = false, name = "id_customer") String idCustomer,
             @RequestParam(required = false, name = "start_date") String startDate,
             @RequestParam(required = false, name = "end_date") String endDate,
             @RequestParam int page, @RequestParam int limit) {
         if (startDate != null && endDate != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAllByDate(page, limit, startDate, endDate));
+            return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAllByDate(page, limit, startDate, endDate, idCustomer));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll(page, limit));
         }

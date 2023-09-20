@@ -176,20 +176,19 @@ public class TransactionService {
                 new PageImpl<>(resultDto, pageable, result.getTotalElements()));
     }
 
-    public ApiResponse getAllByDate(int page, int limit, String startDate, String endDate) {
+    public ApiResponse getAllByDate(int page, int limit, String startDate, String endDate, String idCustomer) {
         LocalDate date = LocalDate.parse(startDate);
         Date formatStartDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
         date = LocalDate.parse(endDate);
         Date formatEndDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        System.out.println("Date : " + formatStartDate);
-        System.out.println("Date : " + formatEndDate);
 
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Transaction> result = transactionRepository.findAllByTransactionDateBetweenOrderByTransactionDateDesc(formatStartDate, formatEndDate, pageable);
         List<DtoTransactionResponse> resultDto = new ArrayList<>();
+        Page<Transaction> result = idCustomer != null ?
+                transactionRepository.findAllByTransactionDateBetweenAndCustomer_IdCustomerOrderByTransactionDateDesc(formatStartDate, formatEndDate, idCustomer, pageable) :
+                transactionRepository.findAllByTransactionDateBetweenOrderByTransactionDateDesc(formatStartDate, formatEndDate, pageable);
 
         for (Transaction transaction: result.getContent()) {
-            System.out.println("size : " + transaction.getTransactionDetailList().size());
             resultDto.add(new DtoTransactionResponse(transaction));
         }
         return new ApiResponse(
