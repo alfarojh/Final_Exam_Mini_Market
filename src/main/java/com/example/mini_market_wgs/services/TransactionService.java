@@ -103,6 +103,7 @@ public class TransactionService {
         if (totalPaid > transactionRequest.getTotalPayment()) {
             return new ApiResponse(Utility.message("insufficient_money", String.valueOf(totalPaid)));
         } else if (transactionRequest.getTransactionDate() == null) {
+            System.out.println("Date null");
             date = new Date();
         } else {
             date = Date.from(Instant.parse(transactionRequest.getTransactionDate() + "T00:00:00Z"));
