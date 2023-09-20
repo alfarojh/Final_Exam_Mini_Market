@@ -23,11 +23,21 @@ public class ItemController {
     private ItemService itemService;
 
     @GetMapping("")
-    public ResponseEntity getItems(@RequestParam int page, @RequestParam int limit) {
-        return ResponseEntity.status(HttpStatus.OK).body(itemService.getAll(page, limit));
+    public ResponseEntity getItems(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false, name = "start_price") Integer startPrice,
+            @RequestParam(required = false, name = "end_price") Integer endPrice,
+            @RequestParam int page, @RequestParam int limit) {
+        if (name != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.getAllByName(name, page, limit));
+        } else if (startPrice != null && endPrice != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.getAllByPrice(startPrice, endPrice, page, limit));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(itemService.getAll(page, limit));
+        }
     }
 
-    @GetMapping("/topItem")
+    @GetMapping("/top-item")
     public ResponseEntity getItemsTop3(
             @RequestParam(required = false, name = "is_top") Boolean isTop,
             @RequestParam(required = false, name = "id_item") String idItem) {

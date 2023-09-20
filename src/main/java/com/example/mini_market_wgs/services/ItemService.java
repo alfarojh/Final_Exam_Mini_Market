@@ -91,22 +91,34 @@ public class ItemService {
 
     public ApiResponse getAll(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Item> result = itemRepository.findAllByIsDeletedIsFalseOrderByName(pageable);
+        return convertDto(itemRepository.findAllByIsDeletedIsFalseOrderByName(pageable), pageable);
+    }
+
+    public ApiResponse getAllByName(String name, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        return convertDto(itemRepository.findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(name, pageable), pageable);
+    }
+
+    public ApiResponse getAllByPrice(Integer startPrice, Integer endPrice, int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        return convertDto(itemRepository.findAllByIsDeletedIsFalseAndPriceBetweenOrderByName(startPrice, endPrice, pageable), pageable);
+    }
+
+    public ApiResponse convertDto(Page<Item> itemPage, Pageable pageable) {
         List<DtoItemResponse> resultDto = new ArrayList<>();
 
-        for (Item item: result.getContent()) {
+        for (Item item: itemPage.getContent()) {
             resultDto.add(new DtoItemResponse(item));
         }
         return new ApiResponse(
                 Utility.message("success"),
-                new PageImpl<>(resultDto, pageable, result.getTotalElements()));
+                new PageImpl<>(resultDto, pageable, itemPage.getTotalElements()));
     }
 
     public ApiResponse getTop3() {
-        List<Item> itemList = itemRepository.findTop3ByOrderByQuantityPurchasedDesc();
         List<DtoItemResponse> resultDto = new ArrayList<>();
 
-        for (Item item: itemList) {
+        for (Item item: itemRepository.findTop3ByOrderByQuantityPurchasedDesc()) {
             resultDto.add(new DtoItemResponse(item));
         }
         return new ApiResponse(

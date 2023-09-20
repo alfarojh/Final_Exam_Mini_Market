@@ -12,7 +12,14 @@ import java.util.Optional;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     Optional<Item> findFirstByIsDeletedIsFalseAndIdItem(String idItem);
+
     Optional<Item> findFirstByIdItemContainingOrderByIdItemDesc(String idItem);
+
     List<Item> findTop3ByOrderByQuantityPurchasedDesc();
+
     Page<Item> findAllByIsDeletedIsFalseOrderByName(Pageable pageable);
+
+    Page<Item> findAllByIsDeletedIsFalseAndNameContainingIgnoreCaseOrderByName(String name, Pageable pageable);
+
+    Page<Item> findAllByIsDeletedIsFalseAndPriceBetweenOrderByName(Integer startPrice, Integer endPrice, Pageable pageable);
 }
