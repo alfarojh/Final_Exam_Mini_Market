@@ -23,10 +23,10 @@ public class DtoTransactionResponse {
     private String nameCashier;
     @JsonProperty("item_list")
     private List<DtoTransactionDetailResponse> transactionDetailResponses;
-    @JsonProperty("total_payment")
-    private Integer totalPayment;
     @JsonProperty("total_paid")
     private Integer totalPaid;
+    @JsonProperty("total_payment")
+    private Integer totalPayment;
     @JsonProperty("total_returned")
     private Integer totalReturned;
 
@@ -35,8 +35,8 @@ public class DtoTransactionResponse {
         this.idTransaction = transaction.getIdTransaction();
         this.nameCustomer = transaction.getCustomer().getName();
         this.nameCashier = transaction.getCashier().getName();
-        this.totalPayment = transaction.getTotalPayment();
         this.totalPaid = transaction.getTotalPaid();
+        this.totalPayment = transaction.getTotalPayment();
         this.totalReturned = transaction.getTotalReturned();
         this.transactionDetailResponses = new ArrayList<>();
         for (TransactionDetail transactionDetail : transaction.getTransactionDetailList()) {
