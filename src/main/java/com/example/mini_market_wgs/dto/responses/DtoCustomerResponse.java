@@ -15,15 +15,11 @@ public class DtoCustomerResponse {
     private String name;
     @JsonProperty("phone_number")
     private String phoneNumber;
-    @JsonProperty("joined_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date joinedAt;
 
     public DtoCustomerResponse(Customer customer) {
         this.idCustomer = customer.getIdCustomer();
         this.name = customer.getName();
         this.phoneNumber = customer.getPhoneNumber();
-        this.joinedAt = customer.getCreatedAt();
     }
 
     public String getIdCustomer() {
@@ -48,13 +44,5 @@ public class DtoCustomerResponse {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public Date getJoinedAt() {
-        return joinedAt;
-    }
-
-    public void setJoinedAt(Date joinedAt) {
-        this.joinedAt = joinedAt;
     }
 }
