@@ -3,7 +3,7 @@ package com.example.mini_market_wgs.dto.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DtoItemRequest {
-    @JsonProperty("id_item")
+    @JsonProperty("sku")
     private String idItem;
     @JsonProperty("name")
     private String name;

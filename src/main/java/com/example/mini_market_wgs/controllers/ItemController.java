@@ -42,7 +42,7 @@ public class ItemController {
     @GetMapping("/top-item")
     public ResponseEntity getItemsTop(
             @RequestParam(required = false, name = "is_top3_relational") Boolean isTop,
-            @RequestParam(required = false, name = "id_item_relational") String idItem) {
+            @RequestParam(required = false, name = "sku") String idItem) {
         if (isTop != null && isTop) {
             return ResponseEntity.status(HttpStatus.OK).body(itemService.getTopItemRelational());
         } else if (idItem != null) {

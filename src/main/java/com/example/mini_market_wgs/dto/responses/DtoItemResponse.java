@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DtoItemResponse {
-    @JsonProperty("id_item")
+    @JsonProperty("sku")
     private String idItem;
     @JsonProperty("name")
     private String name;
