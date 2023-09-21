@@ -205,7 +205,7 @@ public class TransactionService {
         Optional<Transaction> transactionOptional = transactionRepository.findFirstByIdTransaction(idTransaction);
 
         if (!transactionOptional.isPresent()) {
-            return new ApiResponse(Utility.message("item_invalid"));
+            return new ApiResponse(Utility.message("transaction_invalid"));
         } else {
             return new ApiResponse(
                     Utility.message("success"),
